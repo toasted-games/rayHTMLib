@@ -2,10 +2,10 @@
 
 #include <rayHTMLib.h>
 
-rayHTMLib layout;
+rayHTMLib DOM;
 
 int main(int, char **)
 {
-    std::cout << "Hello, world!\n";
+    DOM.loadLayout("assets/layouts/testLayout.html");
     return 0;
 }
