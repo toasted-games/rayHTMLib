@@ -28,7 +28,7 @@ int Core::loadLayout(std::string layout)
 
     std::string content = readFile(layout);
 
-    std::cout << "Layout content: " << content << std::endl;
+    parseLayout(content);
     return 0;
 }
 
@@ -52,6 +52,30 @@ std::string Core::readFile(std::string filename)
 
 void Core::parseLayout(std::string layout)
 {
+    Layout parsedLayout;
+
+    std::regex elementRegex(this->elementRegex);
+    std::regex tagRegex(this->tagRegex);
+    std::regex attributeRegex(this->attributeRegex);
+
+    std::smatch matchElement;
+    std::smatch matchTag;
+    std::smatch matchAttribute;
+
+    std::regex_search(layout, matchElement, elementRegex);
+    std::string element = matchElement.str();
+
+    std::regex_search(element, matchTag, tagRegex);
+    std::string tag = matchTag[1].str();
+    std::string closingTag = "</" + tag + ">";
+
+    std::cout << "Element: " << element << std::endl;
+    std::cout << "Tag: " << tag << std::endl;
+
+    for (int i = 0; i < layout.size(); i++)
+    {
+        std::cout << layout[i] << std::endl;
+    }
 }
 
 void Core::parseElement(std::string element)

@@ -14,6 +14,14 @@
 #include <unistd.h>
 #endif
 
+#include "../ui/element.h"
+
+struct Layout
+{
+    int id;
+    std::vector<Element> elements;
+};
+
 class Core
 {
 public:
