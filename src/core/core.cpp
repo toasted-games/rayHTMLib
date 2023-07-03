@@ -49,3 +49,11 @@ std::string Core::readFile(std::string filename)
 
     return content;
 }
+
+void Core::parseLayout(std::string layout)
+{
+}
+
+void Core::parseElement(std::string element)
+{
+}

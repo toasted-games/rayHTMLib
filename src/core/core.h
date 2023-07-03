@@ -30,6 +30,9 @@ private:
     std::string executablePath;
 
     std::string readFile(std::string filename);
+
+    void parseLayout(std::string layout);
+    void parseElement(std::string element);
 };
 
 #endif
