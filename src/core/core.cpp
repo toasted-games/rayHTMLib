@@ -67,14 +67,22 @@ void Core::parseLayout(std::string layout)
 
     std::regex_search(element, matchTag, tagRegex);
     std::string tag = matchTag[1].str();
-    std::string closingTag = "</" + tag + ">";
+    std::string closingTag = "</" + matchTag[1].str() + ">";
 
-    std::cout << "Element: " << element << std::endl;
-    std::cout << "Tag: " << tag << std::endl;
+    std::regex nextTagRegex("<" + tag + "[^>]*>");
+    std::regex nextClosingTagRegex(closingTag);
 
-    for (int i = 0; i < layout.size(); i++)
+    std::string::const_iterator searchStart(layout.cbegin());
+    std::string::const_iterator searchEnd(layout.cend());
+
+    int tagCount = 0;
+
+    std::smatch foundTag;
+
+    while (std::regex_search(searchStart, searchEnd, foundTag, nextTagRegex))
     {
-        std::cout << layout[i] << std::endl;
+        tagCount++;
+        searchStart = foundTag.suffix().first;
     }
 }
 
