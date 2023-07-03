@@ -5,10 +5,15 @@
 #include <string>
 #include <vector>
 
+#include "core/core.h"
+
 class rayHTMLib
 {
 public:
     rayHTMLib();
+
+private:
+    Core core;
 };
 
 extern rayHTMLib layout;
