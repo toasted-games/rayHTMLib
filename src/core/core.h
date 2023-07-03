@@ -13,6 +13,9 @@ public:
     Core();
 
     int loadLayout(std::string layout);
+
+private:
+    std::string readFile(std::string filename);
 };
 
 #endif
