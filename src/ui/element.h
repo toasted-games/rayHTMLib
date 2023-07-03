@@ -11,7 +11,7 @@ enum ElementType
     DIV,
     SPAN,
     BUTTON,
-    INPUT,
+    HTML_INPUT,
     LABEL,
     TEXTAREA,
     H1,
