@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "core/core.h"
+#include "../src/core/core.h"
 
 class rayHTMLib
 {
