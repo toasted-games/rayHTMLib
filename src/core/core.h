@@ -11,6 +11,8 @@ class Core
 {
 public:
     Core();
+
+    int loadLayout(std::string layout);
 };
 
 #endif
