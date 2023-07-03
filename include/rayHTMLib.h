@@ -2,6 +2,8 @@
 #define RAYHTMLIB_H
 
 #include <iostream>
+#include <string>
+#include <vector>
 
 class rayHTMLib
 {
