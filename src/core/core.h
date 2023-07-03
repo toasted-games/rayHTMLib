@@ -3,6 +3,8 @@
 
 class Core
 {
+public:
+    Core();
 };
 
 #endif
