@@ -1,6 +1,10 @@
 #ifndef RAYHTMLIB_UI_ELEMENT_H
 #define RAYHTMLIB_UI_ELEMENT_H
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 enum ElementType
 {
     MAIN,
