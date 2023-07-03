@@ -32,6 +32,12 @@ enum ElementType
     LI,
 };
 
+struct ElementAttributes
+{
+    std::string id;
+    std::vector<std::string> classes;
+};
+
 class Element
 {
 public:
