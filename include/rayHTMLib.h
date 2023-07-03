@@ -16,6 +16,6 @@ private:
     Core core;
 };
 
-extern rayHTMLib layout;
+extern rayHTMLib DOM;
 
 #endif // RAYHTMLIB_H
