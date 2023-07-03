@@ -12,6 +12,8 @@ class rayHTMLib
 public:
     rayHTMLib();
 
+    int loadLayout(std::string layout);
+
 private:
     Core core;
 };
