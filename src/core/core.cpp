@@ -133,13 +133,9 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
 
     std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
 
+    parsedElement.type = getElementType(tag);
     parsedElement.content = elementContent;
 
-    // unparsedElement = unparsedElement.substr(elementEnd);
-
-    // std::cout << unparsedElement << std::endl;
-
-    // return unparsedElement.size() > 0 ? elementEnd : -1;
     return parsedElement;
 }
 
