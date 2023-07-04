@@ -30,17 +30,17 @@ public:
     int loadLayout(std::string layout);
 
 private:
-    std::string elementRegex = "<[^>]*>";
-    std::string tagRegex = "<([a-zA-Z]+).{0,}>";
-    std::string attributeRegex = "([a-zA-Z]+)=\"([^\"]+)\"";
-    std::string contentRegex = ">([^<]+)<";
+    std::regex elementRegex = std::regex("<[^>]*>");
+    std::regex tagRegex = std::regex("<([a-zA-Z]+).{0,}>");
+    std::regex attributeRegex = std::regex("([a-zA-Z]+)=\"([^\"]+)\"");
+    std::regex contentRegex = std::regex(">([^<]+)<");
 
     std::string executablePath;
 
     std::string readFile(std::string filename);
 
     void parseLayout(std::string layout);
-    void parseElement(std::string element);
+    Element parseElement(std::string *unparsedElementStringPointer);
 };
 
 #endif
