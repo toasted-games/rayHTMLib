@@ -136,6 +136,9 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     parsedElement.type = getElementType(tag);
     parsedElement.content = elementContent;
 
+    // remove parsed element from unparsed string
+    unparsedElementStringPointer->erase(elementStart, elementEnd - elementStart);
+
     return parsedElement;
 }
 
