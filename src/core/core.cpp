@@ -54,40 +54,50 @@ void Core::parseLayout(std::string layout)
 {
     Layout parsedLayout;
 
-    std::regex elementRegex(this->elementRegex);
-    std::regex tagRegex(this->tagRegex);
-    std::regex attributeRegex(this->attributeRegex);
+    parseElement(&layout);
+}
+
+Element Core::parseElement(std::string *unparsedElementStringPointer)
+{
+    std::string unparsedElementString = *unparsedElementStringPointer;
+
+    Element parsedElement;
 
     std::smatch matchElement;
     std::smatch matchTag;
     std::smatch matchAttribute;
 
-    std::regex_search(layout, matchElement, elementRegex);
-    std::string element = matchElement.str();
+    // find element (e.g. <div id="test">)
+    std::regex_search(unparsedElementString, matchElement, elementRegex);
+    std::string element = matchElement.str(); // element string (e.g. <div id="test">)
 
+    // find tag (e.g. div)
     std::regex_search(element, matchTag, tagRegex);
     std::string tag = matchTag[1].str();
     std::string closingTag = "</" + matchTag[1].str() + ">";
 
+    // declare regex for searching same type of tag
     std::regex nextTagRegex("<" + tag + "[^>]*>");
     std::regex nextClosingTagRegex(closingTag);
 
-    std::string::const_iterator searchStart(layout.cbegin());
-    std::string::const_iterator searchEnd(layout.cend());
-    std::string::const_iterator searchStartClosing(layout.cbegin());
-    std::string::const_iterator searchEndClosing(layout.cend());
+    // create iterators for searching
+    std::string::const_iterator searchStart(unparsedElementString.cbegin());
+    std::string::const_iterator searchEnd(unparsedElementString.cend());
+    std::string::const_iterator searchStartClosing(unparsedElementString.cbegin());
+    std::string::const_iterator searchEndClosing(unparsedElementString.cend());
 
-    size_t elementStart = matchElement.position();
-    size_t elementEnd;
+    size_t elementStart = matchElement.position(); // start of element (used for substring)
+    size_t elementEnd = 0;                         // end of element (used for substring)
 
-    int closingCounter = 0;
-    size_t pointer = 0;
-    size_t pointerClosing = 0;
+    int closingCounter = 0; // counts how many closing tags are missing
+
+    size_t pointer = 0;        // pointer for searching next tag
+    size_t pointerClosing = 0; // pointer for searching next closing tag
 
     do
     {
-        searchStart = layout.cbegin() + pointer;
-        searchStartClosing = layout.cbegin() + pointerClosing;
+        searchStart = unparsedElementString.cbegin() + pointer;
+        searchStartClosing = unparsedElementString.cbegin() + pointerClosing;
 
         std::smatch matchNextTag;
         std::regex_search(searchStart, searchEnd, matchNextTag, nextTagRegex);
@@ -117,17 +127,18 @@ void Core::parseLayout(std::string layout)
                 elementEnd = pointerClosing;
             }
         }
-    } while (pointer < layout.size() && closingCounter > 0);
+    } while (pointer < unparsedElementString.size() && closingCounter > 0);
 
-    std::string elementContent = layout.substr(elementStart, elementEnd - elementStart);
+    std::cout << "Element end: " << elementEnd << std::endl;
 
-    std::cout << "Element: " << elementContent << std::endl;
+    std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
+    
+    parsedElement.content = elementContent;
 
-    layout = layout.substr(elementEnd);
+    // unparsedElement = unparsedElement.substr(elementEnd);
 
-    std::cout << layout << std::endl;
-}
+    // std::cout << unparsedElement << std::endl;
 
-void Core::parseElement(std::string element)
-{
+    // return unparsedElement.size() > 0 ? elementEnd : -1;
+    return parsedElement;
 }
