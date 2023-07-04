@@ -141,6 +141,12 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     parsedElement.type = getElementType(tag);
     parsedElement.content = elementContent;
 
+    while (parsedElement.content.size() > 0 && regex_search(parsedElement.content, matchElement, elementRegex))
+    {
+        Element element = parseElement(&parsedElement.content);
+        parsedElement.children.push_back(element);
+    }
+
     // remove parsed element from unparsed string
     unparsedElementStringPointer->erase(elementStart, elementEnd - elementStart);
 
@@ -243,6 +249,7 @@ ElementType Core::getElementType(std::string tag)
     }
     else
     {
+        std::cout << "Unknown tag: " << tag << std::endl;
         return ElementType::SPAN;
     }
 }
