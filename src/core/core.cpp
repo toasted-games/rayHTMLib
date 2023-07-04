@@ -54,7 +54,11 @@ void Core::parseLayout(std::string layout)
 {
     Layout parsedLayout;
 
-    parseElement(&layout);
+    while (layout.size() > 0)
+    {
+        Element element = parseElement(&layout);
+        parsedLayout.elements.push_back(element);
+    }
 }
 
 Element Core::parseElement(std::string *unparsedElementStringPointer)
@@ -86,8 +90,11 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     std::string::const_iterator searchStartClosing(unparsedElementString.cbegin());
     std::string::const_iterator searchEndClosing(unparsedElementString.cend());
 
-    size_t elementStart = matchElement.position(); // start of element (used for substring)
-    size_t elementEnd = 0;                         // end of element (used for substring)
+    std::smatch matchNextClosingTag;
+    std::regex_search(searchStartClosing, searchEndClosing, matchNextClosingTag, nextClosingTagRegex);
+
+    size_t elementStart = matchElement.position();                          // start of element (used for substring)
+    size_t elementEnd = matchNextClosingTag.position() + closingTag.size(); // end of element (used for substring)
 
     int closingCounter = 0; // counts how many closing tags are missing
 
@@ -128,8 +135,6 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
             }
         }
     } while (pointer < unparsedElementString.size() && closingCounter > 0);
-
-    std::cout << "Element end: " << elementEnd << std::endl;
 
     std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
 
