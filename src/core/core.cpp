@@ -132,7 +132,7 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     std::cout << "Element end: " << elementEnd << std::endl;
 
     std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
-    
+
     parsedElement.content = elementContent;
 
     // unparsedElement = unparsedElement.substr(elementEnd);
@@ -141,4 +141,104 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
 
     // return unparsedElement.size() > 0 ? elementEnd : -1;
     return parsedElement;
+}
+
+ElementType Core::getElementType(std::string tag)
+{
+    if (tag == "main")
+    {
+        return ElementType::MAIN;
+    }
+    else if (tag == "div")
+    {
+        return ElementType::DIV;
+    }
+    else if (tag == "span")
+    {
+        return ElementType::SPAN;
+    }
+    else if (tag == "button")
+    {
+        return ElementType::BUTTON;
+    }
+    else if (tag == "input")
+    {
+        return ElementType::HTML_INPUT;
+    }
+    else if (tag == "label")
+    {
+        return ElementType::LABEL;
+    }
+    else if (tag == "textarea")
+    {
+        return ElementType::TEXTAREA;
+    }
+    else if (tag == "h1")
+    {
+        return ElementType::H1;
+    }
+    else if (tag == "h2")
+    {
+        return ElementType::H2;
+    }
+    else if (tag == "h3")
+    {
+        return ElementType::H3;
+    }
+    else if (tag == "h4")
+    {
+        return ElementType::H4;
+    }
+    else if (tag == "h5")
+    {
+        return ElementType::H5;
+    }
+    else if (tag == "h6")
+    {
+        return ElementType::H6;
+    }
+    else if (tag == "p")
+    {
+        return ElementType::P;
+    }
+    else if (tag == "table")
+    {
+        return ElementType::TABLE;
+    }
+    else if (tag == "tr")
+    {
+        return ElementType::TR;
+    }
+    else if (tag == "td")
+    {
+        return ElementType::TD;
+    }
+    else if (tag == "th")
+    {
+        return ElementType::TH;
+    }
+    else if (tag == "img")
+    {
+        return ElementType::IMG;
+    }
+    else if (tag == "a")
+    {
+        return ElementType::A;
+    }
+    else if (tag == "ul")
+    {
+        return ElementType::UL;
+    }
+    else if (tag == "ol")
+    {
+        return ElementType::OL;
+    }
+    else if (tag == "li")
+    {
+        return ElementType::LI;
+    }
+    else
+    {
+        return ElementType::SPAN;
+    }
 }

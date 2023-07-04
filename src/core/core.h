@@ -41,6 +41,8 @@ private:
 
     void parseLayout(std::string layout);
     Element parseElement(std::string *unparsedElementStringPointer);
+
+    ElementType getElementType(std::string tag);
 };
 
 #endif
