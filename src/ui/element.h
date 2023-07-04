@@ -43,11 +43,12 @@ class Element
 public:
     Element();
 
-private:
     ElementType type;
     ElementAttributes attributes;
     std::vector<Element> children;
     std::string content;
+
+private:
 };
 
 #endif
