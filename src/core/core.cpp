@@ -74,16 +74,58 @@ void Core::parseLayout(std::string layout)
 
     std::string::const_iterator searchStart(layout.cbegin());
     std::string::const_iterator searchEnd(layout.cend());
+    std::string::const_iterator searchStartClosing(layout.cbegin());
+    std::string::const_iterator searchEndClosing(layout.cend());
 
-    int tagCount = 0;
+    size_t elementStart = matchElement.position();
+    size_t elementEnd;
 
-    std::smatch foundTag;
+    int closingCounter = 0;
+    size_t pointer = 0;
+    size_t pointerClosing = 0;
 
-    while (std::regex_search(searchStart, searchEnd, foundTag, nextTagRegex))
+    do
     {
-        tagCount++;
-        searchStart = foundTag.suffix().first;
-    }
+        searchStart = layout.cbegin() + pointer;
+        searchStartClosing = layout.cbegin() + pointerClosing;
+
+        std::smatch matchNextTag;
+        std::regex_search(searchStart, searchEnd, matchNextTag, nextTagRegex);
+
+        std::smatch matchNextClosingTag;
+        std::regex_search(searchStartClosing, searchEndClosing, matchNextClosingTag, nextClosingTagRegex);
+
+        if (matchNextTag.empty() || matchNextClosingTag.empty())
+        {
+            break;
+        }
+
+        int64_t nextTagIndex = matchNextTag.position() + pointer;
+        int64_t nextClosingTagIndex = matchNextClosingTag.position() + pointerClosing;
+
+        if (nextTagIndex < nextClosingTagIndex)
+        {
+            pointer = nextTagIndex + matchNextTag.str().size();
+            closingCounter++;
+        }
+        else if (nextTagIndex > nextClosingTagIndex)
+        {
+            pointerClosing = nextClosingTagIndex + matchNextClosingTag.str().size();
+            closingCounter--;
+            if (closingCounter == 0)
+            {
+                elementEnd = pointerClosing;
+            }
+        }
+    } while (pointer < layout.size() && closingCounter > 0);
+
+    std::string elementContent = layout.substr(elementStart, elementEnd - elementStart);
+
+    std::cout << "Element: " << elementContent << std::endl;
+
+    layout = layout.substr(elementEnd);
+
+    std::cout << layout << std::endl;
 }
 
 void Core::parseElement(std::string element)
