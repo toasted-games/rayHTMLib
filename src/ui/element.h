@@ -47,6 +47,7 @@ private:
     ElementType type;
     ElementAttributes attributes;
     std::vector<Element> children;
+    std::string content;
 };
 
 #endif
