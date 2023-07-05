@@ -42,6 +42,7 @@ std::string Core::readFile(std::string filename)
 
     while (std::getline(file, line))
     {
+        line = trimWhitespace(line);
         content += line;
     }
 
@@ -287,4 +288,27 @@ ElementType Core::getElementType(std::string tag)
         std::cout << "Unknown tag: " << tag << std::endl;
         return ElementType::SPAN;
     }
+}
+
+std::string Core::trimWhitespace(std::string str)
+{
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+        {
+            str.erase(0, i);
+            break;
+        }
+    }
+
+    for (size_t i = str.size() - 1; i >= 0; i--)
+    {
+        if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
+        {
+            str.erase(i + 1, str.size() - i - 1);
+            break;
+        }
+    }
+
+    return str;
 }

@@ -43,6 +43,7 @@ private:
     Element parseElement(std::string *unparsedElementStringPointer);
 
     ElementType getElementType(std::string tag);
+    std::string trimWhitespace(std::string str);
 };
 
 #endif
