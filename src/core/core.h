@@ -28,6 +28,7 @@ public:
     Core();
 
     int loadLayout(std::string layout);
+    int loadStylesheet(std::string stylesheet);
 
 private:
     std::regex elementRegex = std::regex("<[^>]*>");

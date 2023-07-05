@@ -32,6 +32,17 @@ int Core::loadLayout(std::string layout)
     return 0;
 }
 
+int Core::loadStylesheet(std::string stylesheet)
+{
+    std::cout << "Loading stylesheet: " << stylesheet << std::endl;
+
+    std::string content = readFile(stylesheet);
+
+    std::cout << content << std::endl;
+
+    return 0;
+}
+
 std::string Core::readFile(std::string filename)
 {
     std::string content = "";
@@ -299,6 +310,11 @@ std::string Core::trimWhitespace(std::string str)
             str.erase(0, i);
             break;
         }
+    }
+
+    if (str.size() == 0)
+    {
+        return str;
     }
 
     for (size_t i = str.size() - 1; i >= 0; i--)
