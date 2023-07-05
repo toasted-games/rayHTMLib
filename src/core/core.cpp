@@ -312,6 +312,11 @@ std::string Core::trimWhitespace(std::string str)
         }
     }
 
+    if (str.size() == 0)
+    {
+        return str;
+    }
+
     for (size_t i = str.size() - 1; i >= 0; i--)
     {
         if (str[i] != ' ' && str[i] != '\n' && str[i] != '\t')
