@@ -55,11 +55,11 @@ void Core::parseLayout(std::string layout)
 {
     Layout parsedLayout;
 
-    while (layout.size() > 0)
-    {
-        Element element = parseElement(&layout);
-        parsedLayout.elements.push_back(element);
-    }
+    // while (layout.size() > 0)
+    // {
+    Element element = parseElement(&layout);
+    parsedLayout.elements.push_back(element);
+    // }
 }
 
 Element Core::parseElement(std::string *unparsedElementStringPointer)
@@ -70,7 +70,6 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
 
     std::smatch matchElement;
     std::smatch matchTag;
-    std::smatch matchAttribute;
 
     // find element (e.g. <div id="test">)
     std::regex_search(unparsedElementString, matchElement, elementRegex);
@@ -175,6 +174,7 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
 
     parsedElement.type = getElementType(tag);
+    parsedElement.attributes = getAttributes(element);
     parsedElement.content = elementContent;
 
     while (parsedElement.content.size() > 0 && regex_search(parsedElement.content, matchElement, elementRegex))
@@ -311,4 +311,59 @@ std::string Core::trimWhitespace(std::string str)
     }
 
     return str;
+}
+
+ElementAttributes Core::getAttributes(std::string element)
+{
+    ElementAttributes attributes;
+
+    std::smatch matchAttribute;
+
+    std::string::const_iterator searchStart = element.cbegin();
+    std::string::const_iterator searchEnd = element.cend();
+
+    while (searchStart <= searchEnd)
+    {
+        std::regex_search(searchStart, searchEnd, matchAttribute, attributeRegex);
+
+        if (matchAttribute.empty())
+        {
+            break;
+        }
+
+        std::string attribute = matchAttribute.str();
+
+        std::string key = matchAttribute[1].str();
+        std::string value = matchAttribute[2].str();
+
+        if (key == "id")
+        {
+            if (value.find(' '))
+            {
+                value = value.substr(0, value.find(' '));
+            }
+
+            attributes.id = value;
+        }
+        else if (key == "class")
+        {
+            std::vector<std::string> classes;
+
+            for (int i = 0; i < value.size(); i++)
+            {
+                if (value[i] == ' ')
+                {
+                    classes.push_back(value.substr(0, i));
+                    value.erase(0, i + 1);
+                    i = 0;
+                }
+            }
+
+            attributes.classes = classes;
+        }
+
+        searchStart += matchAttribute.position() + attribute.size();
+    }
+
+    return attributes;
 }

@@ -44,6 +44,7 @@ private:
 
     ElementType getElementType(std::string tag);
     std::string trimWhitespace(std::string str);
+    ElementAttributes getAttributes(std::string element);
 };
 
 #endif
