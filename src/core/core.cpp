@@ -112,21 +112,36 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
         std::smatch matchNextClosingTag;
         std::regex_search(searchStartClosing, searchEndClosing, matchNextClosingTag, nextClosingTagRegex);
 
-        if (matchNextTag.empty() || matchNextClosingTag.empty())
+        if (matchNextTag.empty() && matchNextClosingTag.empty())
         {
             break;
         }
 
-        int64_t nextTagIndex = matchNextTag.position() + pointer;
-        int64_t nextClosingTagIndex = matchNextClosingTag.position() + pointerClosing;
+        if (!matchNextTag.empty() && !matchNextClosingTag.empty())
+        {
+            int64_t nextTagIndex = matchNextTag.position() + pointer;
+            int64_t nextClosingTagIndex = matchNextClosingTag.position() + pointerClosing;
 
-        if (nextTagIndex < nextClosingTagIndex)
-        {
-            pointer = nextTagIndex + matchNextTag.str().size();
-            closingCounter++;
+            if (nextTagIndex < nextClosingTagIndex)
+            {
+                pointer = nextTagIndex + matchNextTag.str().size();
+                closingCounter++;
+            }
+            else if (nextTagIndex > nextClosingTagIndex)
+            {
+                pointerClosing = nextClosingTagIndex + matchNextClosingTag.str().size();
+                closingCounter--;
+                if (closingCounter == 0)
+                {
+                    elementEnd = pointerClosing;
+                }
+            }
         }
-        else if (nextTagIndex > nextClosingTagIndex)
+
+        if (matchNextTag.empty())
         {
+            int64_t nextClosingTagIndex = matchNextClosingTag.position() + pointerClosing;
+
             pointerClosing = nextClosingTagIndex + matchNextClosingTag.str().size();
             closingCounter--;
             if (closingCounter == 0)
@@ -134,6 +149,15 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
                 elementEnd = pointerClosing;
             }
         }
+
+        if (matchNextClosingTag.empty())
+        {
+            int64_t nextTagIndex = matchNextTag.position() + pointer;
+
+            pointer = nextTagIndex + matchNextTag.str().size();
+            closingCounter++;
+        }
+
     } while (pointer < unparsedElementString.size() && closingCounter > 0);
 
     std::string elementContent = unparsedElementString.substr(elementStart + element.size(), elementEnd - element.size() - elementStart - closingTag.size());
