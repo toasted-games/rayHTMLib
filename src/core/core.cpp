@@ -32,6 +32,10 @@ int Core::loadLayout(std::string layout)
     return 0;
 }
 
+int Core::loadStylesheet(std::string stylesheet)
+{
+}
+
 std::string Core::readFile(std::string filename)
 {
     std::string content = "";

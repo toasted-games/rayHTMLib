@@ -13,6 +13,7 @@ public:
     rayHTMLib();
 
     int loadLayout(std::string layout);
+    int loadStylesheet(std::string stylesheet);
 
 private:
     Core core;
