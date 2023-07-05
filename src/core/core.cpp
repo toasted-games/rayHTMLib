@@ -96,6 +96,17 @@ Element Core::parseElement(std::string *unparsedElementStringPointer)
     size_t elementStart = matchElement.position();                          // start of element (used for substring)
     size_t elementEnd = matchNextClosingTag.position() + closingTag.size(); // end of element (used for substring)
 
+    if (elementStart != 0)
+    {
+        std::string content = unparsedElementString.substr(0, elementStart);
+        parsedElement.content = content;
+        parsedElement.type = ElementType::SPAN;
+
+        unparsedElementStringPointer->erase(0, elementStart);
+
+        return parsedElement;
+    }
+
     int closingCounter = 0; // counts how many closing tags are missing
 
     size_t pointer = 0;        // pointer for searching next tag
